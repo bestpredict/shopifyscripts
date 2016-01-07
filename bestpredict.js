@@ -19,9 +19,11 @@
             });
         },
         ExecuteJSONP: function (url, parameters, callback) {
+            var nowMilli = new Date().getMilliseconds();
+
             //Prepare a function name that will be called when the JSONP request has loaded.
             //It should be unique, to prevent accidentally calling it multiple times.
-            var callbackName = "MyApp-JSONPCallback-" + new Date().getMilliseconds();
+            var callbackName = "bestpredict-JSONPCallback-" + nowMilli;
 
             //Make the callback function available to the global scope, 
             //otherwise it can't be called when the settings are loaded.
@@ -37,15 +39,15 @@
             }
 
             //Add a unique parameter to the querystring, to overcome browser caching.
-            kvps.push("uid=" + new Date().getMilliseconds());
+            kvps.push("uid=" + nowMilli);
 
             var qs = "?" + kvps.join("&");
 
             //Build the script element, passing along the shop name and the load function's name
             var script = document.createElement("script");
-            script.src = url + qs;
-            script.async = true;
             script.type = "text/javascript";
+            script.async = true;
+            script.src = url + qs;
 
             //Append the script to the document's head to execute it.
             document.head.appendChild(script);
@@ -81,7 +83,6 @@
 
             script.src = url;
             document.getElementsByTagName("head")[0].appendChild(script);
-
         }
     };
 
