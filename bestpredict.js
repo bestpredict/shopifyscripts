@@ -68,7 +68,7 @@
 
             //Prepare a function name that will be called when the JSONP request has loaded.
             //It should be unique, to prevent accidentally calling it multiple times.
-            var callbackName = "bestpredict-JSONPCallback-" + nowMilli;
+            var callbackName = "bestpredict_JSONPCallback_" + nowMilli;
 
             //Make the callback function available to the global scope, 
             //otherwise it can't be called when the settings are loaded.
