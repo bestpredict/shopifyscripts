@@ -105,7 +105,7 @@
             };
 
             //Get the settings
-            api.ExecuteJSONP("http://shopify.bestpredict.com/widget/settings", { shop: shop }, settingsLoaded);
+            api.ExecuteJSONP("http://shopify.bestpredict.com/api/settings", { shop: shop }, settingsLoaded);
         },
         LoadScript: function (url, callback) {
 
