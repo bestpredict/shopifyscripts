@@ -2,8 +2,53 @@
 
     var api = {
         Settings: {},
+        PageInformation: {
+            CustomerId: '',
+            PageUrl: '',
+            PageType: '',
+            ResourceType: '',
+            ResourceId: '',
+        },
         Run: function ($) {
+
+            var pages = {
+                Product: function () {
+                    alert("On Product Page!");
+                },
+                Cart: function () {
+                    alert("On Cart Page!");
+                },
+                Home: function () {
+                    alert("On Home Page!");
+                }
+            }
+
             //App Code here
+            var pageInfo = __st;
+
+            api.PageInformation.CustomerId = pageInfo.cid;
+
+            api.PageInformation.PageUrl = pageInfo.pageurl;
+
+            api.PageInformation.PageType = pageInfo.p;//product, collection, page, home, cart, blog, article...
+
+            api.PageInformation.ResourceType = pageInfo.rtyp;//product, collection, blog, article ...
+
+            api.PageInformation.ResourceId = pageInfo.rid;//holds the resource id so product id on the product page
+
+
+            var pageType = api.PageInformation.PageType;
+
+            if (pageType == "product") {
+                pages.Product();
+            }
+            else if (pageType == "home") {
+                pages.Home();
+            }
+            else if (pageType == "cart") {
+                pages.Cart();
+            }
+
         },
         Start: function ($) {
             //Get the *.myshopify.com domain
