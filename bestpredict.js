@@ -112,7 +112,7 @@
             };
 
             //Get the settings
-            api.ExecuteJSONP("http://bpshopifyrecommender.azurewebsites.net/api/settings", settingsLoaded);
+            api.ExecuteJSONP("http://bpshopifyrecommender.azurewebsites.net/api/settings", {}, settingsLoaded);
         },
         LoadScript: function (url, callback) {
 
