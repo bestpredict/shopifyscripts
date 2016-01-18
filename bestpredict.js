@@ -61,7 +61,7 @@
             api.Shop = Shopify.shop;
 
             //Load the store settings
-            api.LoadSettings(api.Shop, function (settings) {
+            api.LoadSettings(function (settings) {
                 //Save app settings
                 api.Settings = settings;
 
