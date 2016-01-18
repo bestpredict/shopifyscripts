@@ -1,7 +1,7 @@
 ﻿(function () {
-
     var api = {
         Settings: {},
+        Shop: "",
         PageInformation: {
             CustomerId: '',
             PageUrl: '',
@@ -13,7 +13,13 @@
 
             var pages = {
                 Product: function () {
-                    alert("On Product Page!");
+                    api.ExecuteJSONP("http://bpshopifyrecommender.azurewebsites.net/api/Predict", {
+                        id: api.Shop,
+                        productId: api.PageInformation.ResourceId,
+                        userId: api.PageInformation.CustomerId
+                    }, function (res) {
+                        alert("On Product Page!" + JSON.stringify(res));
+                    });
                 },
                 Cart: function () {
                     alert("On Cart Page!");
@@ -34,7 +40,7 @@
 
             api.PageInformation.ResourceType = pageInfo.rtyp;//product, collection, blog, article ...
 
-            api.PageInformation.ResourceId = pageInfo.rid;//holds the resource id so product id on the product page
+            api.PageInformation.ResourceId = pageInfo.rid;//holds the resource id so product id on the product page, collection id on the collection page and so on
 
 
             var pageType = api.PageInformation.PageType;
@@ -52,10 +58,10 @@
         },
         Start: function ($) {
             //Get the *.myshopify.com domain
-            var shop = Shopify.shop;
+            api.Shop = Shopify.shop;
 
             //Load the store settings
-            api.LoadSettings(shop, function (settings) {
+            api.LoadSettings(api.Shop, function (settings) {
                 //Save app settings
                 api.Settings = settings;
 
@@ -85,6 +91,7 @@
 
             //Add a unique parameter to the querystring, to overcome browser caching.
             kvps.push("uid=" + nowMilli);
+            kvps.push("shop=" + api.Shop);
 
             var qs = "?" + kvps.join("&");
 
@@ -97,7 +104,7 @@
             //Append the script to the document's head to execute it.
             document.head.appendChild(script);
         },
-        LoadSettings: function (shop, callback) {
+        LoadSettings: function (callback) {
             //Prepare a function to handle when the settings are loaded.
             var settingsLoaded = function (settings) {
                 //Return the settings to the Start function so it can continue loading.
@@ -105,7 +112,7 @@
             };
 
             //Get the settings
-            api.ExecuteJSONP("http://shopify.bestpredict.com/api/settings", { shop: shop }, settingsLoaded);
+            api.ExecuteJSONP("http://bpshopifyrecommender.azurewebsites.net/api/settings", settingsLoaded);
         },
         LoadScript: function (url, callback) {
 
