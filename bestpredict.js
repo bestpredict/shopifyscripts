@@ -31,7 +31,7 @@
             //App Code here
             var pageInfo = __st;
 
-            api.PageInformation.CustomerId = pageInfo.cid;
+            api.PageInformation.CustomerId = pageInfo.cid ? pageInfo.cid : "";
 
             api.PageInformation.PageUrl = pageInfo.pageurl;
 
