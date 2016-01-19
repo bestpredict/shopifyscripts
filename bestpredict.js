@@ -25,7 +25,9 @@
                         var context = { items: res };
                         var html = template(context);
 
-                        alert("On Product Page!" + JSON.stringify(res));
+                        $("#bestpredict-item-recommend").html(html).show();
+
+                        //alert("On Product Page!" + JSON.stringify(res));
                     });
                 },
                 Cart: function () {
