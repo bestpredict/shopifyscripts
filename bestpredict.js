@@ -14,7 +14,6 @@
             var pages = {
                 Product: function () {
                     api.ExecuteJSONP("http://bpshopifyrecommender.azurewebsites.net/api/Predict", {
-                        id: api.Shop,
                         productId: api.PageInformation.ResourceId,
                         userId: api.PageInformation.CustomerId
                     }, function (res) {
