@@ -20,6 +20,12 @@
 
                         var source = '<ul class="bestpredict-item">{{#each items}}<li><a href="{{url}}" item-id="{{id}}">{{title}}</a></li>{{/each}}</ul>';
 
+                        var pageTemplate = $("#bestpredict-item-recommend-template");
+
+                        if (pageTemplate.length > 0) {
+                            source = pageTemplate.html();
+                        }
+
                         var template = Handlebars.compile(source);
 
                         var context = { items: res };
