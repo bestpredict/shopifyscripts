@@ -17,6 +17,14 @@
                         productId: api.PageInformation.ResourceId,
                         userId: api.PageInformation.CustomerId
                     }, function (res) {
+
+                        var source = '<ul class="bestpredict-item">{{#each items}}<li><a href="{{url}}" item-id="{{id}}">{{title}}</a></li>{{/each}}</ul>';
+
+                        var template = Handlebars.compile(source);
+
+                        var context = { items: res };
+                        var html = template(context);
+
                         alert("On Product Page!" + JSON.stringify(res));
                     });
                 },
@@ -63,9 +71,9 @@
             api.LoadSettings(function (settings) {
                 //Save app settings
                 api.Settings = settings;
-                
+
                 if (!Handlebars) {
-                    api.LoadScript('https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js', function() {
+                    api.LoadScript('https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js', function () {
                         //Load the app
                         api.Run($);
                     });
