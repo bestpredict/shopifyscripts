@@ -63,9 +63,16 @@
             api.LoadSettings(function (settings) {
                 //Save app settings
                 api.Settings = settings;
-
-                //Load the app
-                api.Run($);
+                
+                if (!Handlebars) {
+                    api.LoadScript('https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js', function() {
+                        //Load the app
+                        api.Run($);
+                    });
+                } else {
+                    //Load the app
+                    api.Run($);
+                }
             });
         },
         Get: function (url, parameters, callback) {
