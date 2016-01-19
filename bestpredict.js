@@ -13,7 +13,7 @@
 
             var pages = {
                 Product: function () {
-                    api.ExecuteJSONP("http://bpshopifyrecommender.azurewebsites.net/api/Predict", {
+                    api.Get("http://bpshopifyrecommender.azurewebsites.net/api/Predict", {
                         productId: api.PageInformation.ResourceId,
                         userId: api.PageInformation.CustomerId
                     }, function (res) {
@@ -68,6 +68,15 @@
                 api.Run($);
             });
         },
+        Get: function (url, parameters, callback) {
+            if (!parameters) {
+                parameters = {};
+            }
+
+            parameters.shop = api.Shop;
+
+            jQuery.get(url, parameters, callback);
+        },
         ExecuteJSONP: function (url, parameters, callback) {
             var nowMilli = new Date().getMilliseconds();
 
@@ -111,7 +120,7 @@
             };
 
             //Get the settings
-            api.ExecuteJSONP("http://bpshopifyrecommender.azurewebsites.net/api/settings", {}, settingsLoaded);
+            api.Get("http://bpshopifyrecommender.azurewebsites.net/api/settings", {}, settingsLoaded);
         },
         LoadScript: function (url, callback) {
 
