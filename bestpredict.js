@@ -2,6 +2,7 @@
     var api = {
         Settings: {},
         Shop: "",
+        Server: "http://bpshopifyrecommender.azurewebsites.net",
         PageInformation: {
             CustomerId: '',
             PageUrl: '',
@@ -13,7 +14,7 @@
 
             var pages = {
                 Product: function () {
-                    api.Get("http://bpshopifyrecommender.azurewebsites.net/api/Predict", {
+                    api.Get("/api/Predict", {
                         productId: api.PageInformation.ResourceId,
                         userId: api.PageInformation.CustomerId
                     }, function (res) {
@@ -98,7 +99,7 @@
 
             parameters.shop = api.Shop;
 
-            jQuery.get(url, parameters, callback);
+            jQuery.get(api.Server + url, parameters, callback);
         },
         ExecuteJSONP: function (url, parameters, callback) {
             var nowMilli = new Date().getMilliseconds();
@@ -130,7 +131,7 @@
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.async = true;
-            script.src = url + qs;
+            script.src = api.Server + url + qs;
 
             //Append the script to the document's head to execute it.
             document.head.appendChild(script);
@@ -143,7 +144,7 @@
             };
 
             //Get the settings
-            api.Get("http://bpshopifyrecommender.azurewebsites.net/api/settings", {}, settingsLoaded);
+            api.Get("/api/settings", {}, settingsLoaded);
         },
         LoadScript: function (url, callback) {
 
