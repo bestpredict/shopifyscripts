@@ -30,7 +30,7 @@
                         Liquid.Partial.registerTemplates();
                         
                         var context = { products: res };
-                        var html = Liquid.Template.parse(pageTemplate).render(context);
+                        var html = Liquid.Template.parse(source).render(context);
 
                         $("#bestpredict-item-recommend").html(html).show();
 
