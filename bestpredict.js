@@ -11,7 +11,7 @@
             ResourceId: '',
         },
         Run: function ($) {
-
+            var Liquid = require('liquid');
             var pages = {
                 Product: function () {
                     api.Get("/api/Predict", {
