@@ -27,10 +27,10 @@
                             source = pageTemplate.html();
                         }
 
-                        var template = Handlebars.compile(source);
-
-                        var context = { items: res };
-                        var html = template(context);
+                        Liquid.Partial.registerTemplates();
+                        
+                        var context = { products: res };
+                        var html = Liquid.Template.parse(pageTemplate).render(context);
 
                         $("#bestpredict-item-recommend").html(html).show();
 
@@ -80,16 +80,12 @@
             api.LoadSettings(function (settings) {
                 //Save app settings
                 api.Settings = settings;
-
-                if (!Handlebars) {
-                    api.LoadScript('https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js', function () {
-                        //Load the app
-                        api.Run($);
-                    });
-                } else {
+                
+                api.LoadScript(api.Server + '/scripts/liquid.min.js', function () {
                     //Load the app
                     api.Run($);
-                }
+                });
+                
             });
         },
         Get: function (url, parameters, callback) {
