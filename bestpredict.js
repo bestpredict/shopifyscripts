@@ -2,7 +2,7 @@
     var api = {
         Settings: {},
         Shop: "",
-        Server: "http://bpshopifyrecommender.azurewebsites.net",
+        Server: "http://recommender.shopify.bestpredict.com",
         PageInformation: {
             CustomerId: '',
             PageUrl: '',
