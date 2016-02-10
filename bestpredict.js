@@ -56,10 +56,10 @@
             var recommendElement = document.getElementsByName('bestpredict-recommendation');
 
             Array.prototype.forEach.call(recommendElement, function (elem) {
-                var recommendType = elem.dataset.recommendationType;
+                var recommendType = elem.attributes.getNamedItem("recommendation-type").value//elem.dataset.recommendationType;
                 var action = api.Urls.find(function (obj) { return obj.key == recommendType; })[0].value;
 
-                var template = elem.dataset.template;
+                var template = elem.attributes.getNamedItem("template").value;//elem.dataset.template;
 
                 api.DownloadAndPopulate(
                 {
