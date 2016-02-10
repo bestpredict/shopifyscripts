@@ -57,7 +57,7 @@
 
             Array.prototype.forEach.call(recommendElement, function (elem) {
                 var recommendType = elem.attributes.getNamedItem("recommendation-type").value//elem.dataset.recommendationType;
-                var action = api.Urls.find(function (obj) { return obj.key == recommendType; })[0].value;
+                var action = api.Urls.find(function (obj) { return obj.key == recommendType; }).value;
 
                 var template = elem.attributes.getNamedItem("template").value;//elem.dataset.template;
 
