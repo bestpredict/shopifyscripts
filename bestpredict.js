@@ -10,42 +10,69 @@
             ResourceType: '',
             ResourceId: '',
         },
+        DownloadAndPopulate: function (options) {
+            api.Get(url, {
+                productId: options.productId,
+                userId: api.PageInformation.CustomerId
+            }, function (res) {
+                api.RunTemplate(options.template, { products: res }, options.location);
+            });
+        },
+        PageActions: {
+            Product: function () {
+                /*                api.DownloadAndPopulate(api.PageInformation.ResourceId, "/api/Predict",
+                                    "#bestpredict-item-recommend-template",
+                                    "#bestpredict-item-recommend");*/
+            },
+            Cart: function () {
+            },
+            Home: function () {
+            },
+        },
+        Urls: [
+            { key: 'similar-viewed', value: 'Predict' },
+            { key: 'similar-bought', value: 'Predict' },
+            { key: 'history', value: 'Predict' },
+            { key: 'trending', value: 'Predict' },
+            { key: 'top', value: 'Predict' },
+        ],
+
         Run: function ($) {
-            var Liquid = require('liquid');
-            var pages = {
-                Product: function () {
-                    api.Get("/api/Predict", {
-                        productId: api.PageInformation.ResourceId,
-                        userId: api.PageInformation.CustomerId
-                    }, function (res) {
 
-                        var source = '<ul class="bestpredict-item">{{#each items}}<li><a href="{{url}}" item-id="{{id}}">{{title}}</a></li>{{/each}}</ul>';
+            api.ReadShopifyPageInformation();
 
-                        var pageTemplate = $("#bestpredict-item-recommend-template");
+            var pageType = api.PageInformation.PageType;
 
-                        if (pageTemplate.length > 0) {
-                            source = pageTemplate.html();
-                        }
-
-                        Liquid.Partial.registerTemplates();
-                        
-                        var context = { products: res };
-                        var html = Liquid.Template.parse(source).render(context);
-
-                        $("#bestpredict-item-recommend").html(html).show();
-
-                        //alert("On Product Page!" + JSON.stringify(res));
-                    });
-                },
-                Cart: function () {
-                    alert("On Cart Page!");
-                },
-                Home: function () {
-                    alert("On Home Page!");
-                }
+            if (pageType == "product") {
+                api.PageActions.Product();
+            }
+            else if (pageType == "home") {
+                api.PageActions.Home();
+            }
+            else if (pageType == "cart") {
+                api.PageActions.Cart();
             }
 
-            //App Code here
+            var recommendElement = document.getElementsByName('bestpredict-recommendation');
+
+            recommendElement.forEach(function (elem) {
+                var recommendType = elem.dataset.recommendationType;
+                var action = api.Urls.find(function (obj) { return obj.key == recommendType; })[0].value;
+
+                var template = elem.dataset.template;
+
+                api.DownloadAndPopulate(
+                {
+                    productId: api.PageInformation.ResourceId,
+                    url: "/api/" + action,
+                    template: "#" + template,
+                    location: "#" + elem.id
+                });
+
+            });
+        },
+        ReadShopifyPageInformation: function () {
+
             var pageInfo = __st;
 
             api.PageInformation.CustomerId = pageInfo.cid ? pageInfo.cid : "";
@@ -58,19 +85,6 @@
 
             api.PageInformation.ResourceId = pageInfo.rid;//holds the resource id so product id on the product page, collection id on the collection page and so on
 
-
-            var pageType = api.PageInformation.PageType;
-
-            if (pageType == "product") {
-                pages.Product();
-            }
-            else if (pageType == "home") {
-                pages.Home();
-            }
-            else if (pageType == "cart") {
-                pages.Cart();
-            }
-
         },
         Start: function ($) {
             //Get the *.myshopify.com domain
@@ -80,13 +94,31 @@
             api.LoadSettings(function (settings) {
                 //Save app settings
                 api.Settings = settings;
-                
+
                 api.LoadScript(api.Server + '/scripts/liquid.min.js', function () {
                     //Load the app
                     api.Run($);
                 });
-                
+
             });
+        },
+        RunTemplate: function (template, context, location) {
+            //move the next two lines
+            var Liquid = require('liquid');
+            Liquid.Partial.registerTemplates();
+
+
+            var source = '';
+
+            var pageTemplate = $(template);
+
+            if (pageTemplate.length > 0) {
+                source = pageTemplate.html();
+            }
+
+            var html = Liquid.Template.parse(source).render(context);
+
+            $(location).html(html).show();
         },
         Get: function (url, parameters, callback) {
             if (!parameters) {
