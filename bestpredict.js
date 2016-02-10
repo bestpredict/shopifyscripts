@@ -55,7 +55,7 @@
 
             var recommendElement = document.getElementsByName('bestpredict-recommendation');
 
-            recommendElement.forEach(function (elem) {
+            Array.prototype.forEach.call(recommendElement, function (elem) {
                 var recommendType = elem.dataset.recommendationType;
                 var action = api.Urls.find(function (obj) { return obj.key == recommendType; })[0].value;
 
