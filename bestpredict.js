@@ -11,7 +11,7 @@
             ResourceId: '',
         },
         DownloadAndPopulate: function (options) {
-            api.Get(url, {
+            api.Get(options.url, {
                 productId: options.productId,
                 userId: api.PageInformation.CustomerId
             }, function (res) {
