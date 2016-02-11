@@ -213,7 +213,7 @@
         },
         Helpers: {
             formatCurrancy: function (val) {
-                return api.MoneyFormat.replace("{{ammount}}", val);
+                return api.MoneyFormat.replace("{{amount}}", val);
             },
             formatMoney: function (n, decPlaces, thouSeparator, decSeparator) {
                 var decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
