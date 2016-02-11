@@ -10,6 +10,7 @@
             ResourceType: '',
             ResourceId: '',
         },
+        MoneyFormat: '$ {{amount}}',
         DownloadAndPopulate: function (options) {
             api.Get(options.url, {
                 productId: options.productId,
@@ -20,9 +21,7 @@
         },
         PageActions: {
             Product: function () {
-                /*                api.DownloadAndPopulate(api.PageInformation.ResourceId, "/api/Predict",
-                                    "#bestpredict-item-recommend-template",
-                                    "#bestpredict-item-recommend");*/
+
             },
             Cart: function () {
             },
@@ -40,6 +39,7 @@
         Run: function ($) {
 
             api.ReadShopifyPageInformation();
+            api.MoneyFormat = Shopify.money_format;
 
             var pageType = api.PageInformation.PageType;
 
@@ -104,9 +104,7 @@
         },
         RunTemplate: function (template, context, location) {
             //move the next two lines
-            var Liquid = require('liquid');
-            Liquid.Partial.registerTemplates();
-
+            var engine = api.GetTemplateEngine();
 
             var source = '';
 
@@ -116,9 +114,26 @@
                 source = pageTemplate.html();
             }
 
-            var html = Liquid.Template.parse(source).render(context);
+            var html = engine.Template.parse(source).render(context);
 
             $(location).html(html).show();
+        },
+        GetTemplateEngine: function () {
+            var engine = require('liquid');
+            engine.Partial.registerTemplates();
+
+            engine.Template.registerFilters({
+                img_url: function (input, type) {
+                    return String(input).replace(/\.([0-9a-z]+)(?:[\?#]|$)/i, "_" + type + "$&");
+                },
+
+                money: function (input) {
+                    var formatted = api.Helpers.formatMoney(input);
+                    return api.Helpers.formatCurrancy(formatted);
+                }
+            });
+
+            return engine;
         },
         Get: function (url, parameters, callback) {
             if (!parameters) {
@@ -195,7 +210,22 @@
 
             script.src = url;
             document.getElementsByTagName("head")[0].appendChild(script);
+        },
+        Helpers: {
+            formatCurrancy: function (val) {
+                return api.MoneyFormat.replace("{{ammount}}", val);
+            },
+            formatMoney: function (n, decPlaces, thouSeparator, decSeparator) {
+                var decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+                    decSeparator = decSeparator == undefined ? "." : decSeparator,
+                    thouSeparator = thouSeparator == undefined ? "," : thouSeparator,
+                    sign = n < 0 ? "-" : "",
+                    i = parseInt(n = Math.abs(+n || 0).toFixed(decPlaces)) + "",
+                    j = (j = i.length) > 3 ? j % 3 : 0;
+                return sign + (j ? i.substr(0, j) + thouSeparator : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thouSeparator) + (decPlaces ? decSeparator + Math.abs(n - i).toFixed(decPlaces).slice(2) : "");
+            }
         }
+
     };
 
     if ((typeof jQuery === 'undefined') || (parseFloat(jQuery.fn.jquery) < 1.7)) {
