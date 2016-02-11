@@ -122,7 +122,7 @@
             var engine = require('liquid');
             engine.Partial.registerTemplates();
 
-            engine.Template.registerFilters({
+            engine.Template.registerFilter({
                 img_url: function (input, type) {
                     return String(input).replace(/\.([0-9a-z]+)(?:[\?#]|$)/i, "_" + type + "$&");
                 },
