@@ -55,10 +55,11 @@
                 var action = api.Urls.find(function (obj) { return obj.key == recommendType; }).value;
 
                 var template = elem.attributes.getNamedItem("template").value;//elem.dataset.template;
+                var productId = elem.attributes.getNamedItem("product-id").value;
 
                 api.DownloadAndPopulate(
                 {
-                    productId: api.PageInformation.ResourceId,
+                    productId: productId,
                     url: "/api/" + action,
                     template: "#" + template,
                     location: "#" + elem.id
