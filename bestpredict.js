@@ -25,8 +25,6 @@
             },
             Cart: function () {
             },
-            Home: function () {
-            },
         },
         Urls: [
             { key: 'similar-viewed', value: 'Predict' },
@@ -46,9 +44,7 @@
             if (pageType == "product") {
                 api.PageActions.Product();
             }
-            else if (pageType == "home") {
-                api.PageActions.Home();
-            }
+            else if (pageType == "home") { }
             else if (pageType == "cart") {
                 api.PageActions.Cart();
             }
