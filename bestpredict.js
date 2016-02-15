@@ -37,7 +37,6 @@
         Run: function ($) {
 
             api.ReadShopifyPageInformation();
-            api.MoneyFormat = Shopify.money_format;
 
             var pageType = api.PageInformation.PageType;
 
@@ -81,6 +80,7 @@
 
             api.PageInformation.ResourceId = pageInfo.rid;//holds the resource id so product id on the product page, collection id on the collection page and so on
 
+            api.MoneyFormat = Shopify.money_format;
         },
         Start: function ($) {
             //Get the *.myshopify.com domain
