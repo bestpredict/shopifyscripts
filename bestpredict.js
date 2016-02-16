@@ -14,7 +14,7 @@
         DownloadAndPopulate: function (options) {
             api.Get(options.url, {
                 productId: options.productId,
-                userId: api.PageInformation.CustomerId
+                userId: options.userId,
             }, function (res) {
                 api.RunTemplate(options.template, { products: res }, options.location);
             });
@@ -27,11 +27,11 @@
             },
         },
         Urls: [
-            { key: 'similar-viewed', value: 'Predict' },
-            { key: 'similar-bought', value: 'Predict' },
-            { key: 'history', value: 'Predict' },
-            { key: 'trending', value: 'Predict' },
-            { key: 'top', value: 'Predict' },
+            { key: 'similar-viewed', action: 'Predict' },
+            { key: 'similar-bought', action: 'Predict' },
+            { key: 'history', action: 'Predict' },
+            { key: 'trending', action: 'Predict' },
+            { key: 'top', action: 'Predict' },
         ],
 
         Run: function ($) {
@@ -52,14 +52,16 @@
 
             Array.prototype.forEach.call(recommendElement, function (elem) {
                 var recommendType = elem.attributes.getNamedItem("recommendation-type").value//elem.dataset.recommendationType;
-                var action = api.Urls.find(function (obj) { return obj.key == recommendType; }).value;
+                var action = api.Urls.find(function (obj) { return obj.key == recommendType; }).action;
 
                 var template = elem.attributes.getNamedItem("template").value;//elem.dataset.template;
-                var productId = elem.attributes.getNamedItem("product-id").value;
+                var productId = elem.attributes.getNamedItem("product").value;
+                var userId = elem.attributes.getNamedItem("user").value;
 
                 api.DownloadAndPopulate(
                 {
                     productId: productId,
+                    userId: userId,
                     url: "/api/" + action,
                     template: "#" + template,
                     location: "#" + elem.id
