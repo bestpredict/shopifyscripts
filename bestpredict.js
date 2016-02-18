@@ -12,6 +12,8 @@
         },
         MoneyFormat: '$ {{amount}}',
         DownloadAndPopulate: function (options) {
+            // Override defaults with arguments
+            // $.extend({}, options);
             api.Get(options.url, {
                 productId: options.productId,
                 userId: options.userId,
@@ -57,6 +59,9 @@
                 var template = elem.attributes.getNamedItem("template").value;//elem.dataset.template;
                 var productId = elem.attributes.getNamedItem("product").value;
                 var userId = elem.attributes.getNamedItem("user").value;
+                var moneyFormat = elem.attributes.getNamedItem("money-format").value;
+
+                api.MoneyFormat = moneyFormat;//this is a hack for now.
 
                 api.DownloadAndPopulate(
                 {
@@ -128,6 +133,7 @@
 
                 money: function (input) {
                     var formatted = api.Helpers.formatMoney(input);
+
                     return api.Helpers.formatCurrancy(formatted);
                 }
             });
@@ -211,8 +217,10 @@
             document.getElementsByTagName("head")[0].appendChild(script);
         },
         Helpers: {
-            formatCurrancy: function (val) {
-                return api.MoneyFormat.replace("{{amount}}", val);
+            formatCurrancy: function (val, format) {
+                //return api.MoneyFormat.replace("{{amount}}", val);
+
+                return Shopify.formatMoney(val, format);
             },
             formatMoney: function (n, decPlaces, thouSeparator, decSeparator) {
                 decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces;
