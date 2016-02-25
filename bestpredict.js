@@ -47,11 +47,11 @@
 
             api.ReadShopifyPageInformation();
 
-            var pageType = api.PageInformation.PageType;
+            /*var pageType = api.PageInformation.PageType;
 
             if (pageType == "product") {
                 api.PageActions.Product();
-            }
+            }*/
             /*else if (pageType == "home") { }
             else if (pageType == "cart") { }*/
 
@@ -83,6 +83,9 @@
             });
         },
         ReadShopifyPageInformation: function () {
+
+            if (__st == undefined)
+                return;
 
             var pageInfo = __st;
 
@@ -137,7 +140,7 @@
             engine.Template.registerFilter({
                 img_url: function (input, type) {
 
-                    if (input ==null || input.length == 0)
+                    if (input == null || input.length == 0)
                         return noImageUrl;
 
                     return String(input).replace(/\.([0-9a-z]+)(?:[\?#]|$)/i, "_" + type + "$&");
