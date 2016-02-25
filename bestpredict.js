@@ -17,16 +17,23 @@
             api.Get(options.url, {
                 productId: options.productId,
                 userId: options.userId,
+                type: options.type,
             }, function (res) {
-                api.RunTemplate(options.template, { products: res }, options.location);
+                res.forEach(function (item) {
+                    var hasQueryString = item.url.indexOf("?") > -1;
+                    item.url = item.url + (hasQueryString ? "&" : "?") + "bestpredict_from=" + options.productId;
+                });
+                api.RunTemplate(options.template, { products: res }, options.location, options.noImageUrl);
             });
         },
         PageActions: {
             Product: function () {
-
-            },
-            Cart: function () {
-            },
+                api.Get("/api/view", {
+                    productId: api.PageInformation.ResourceId,
+                    pageUrl: api.PageInformation.PageUrl,
+                    customerId: api.PageInformation.CustomerId
+                });
+            }
         },
         Urls: [
             { key: 'similar-viewed', action: 'Predict' },
@@ -45,10 +52,8 @@
             if (pageType == "product") {
                 api.PageActions.Product();
             }
-            else if (pageType == "home") { }
-            else if (pageType == "cart") {
-                api.PageActions.Cart();
-            }
+            /*else if (pageType == "home") { }
+            else if (pageType == "cart") { }*/
 
             var recommendElement = document.getElementsByName('bestpredict-recommendation');
 
@@ -60,6 +65,7 @@
                 var productId = elem.attributes.getNamedItem("product").value;
                 var userId = elem.attributes.getNamedItem("user").value;
                 var moneyFormat = elem.attributes.getNamedItem("money-format").value;
+                var noImageUrl = elem.attributes.getNamedItem("no-image").value;
 
                 api.MoneyFormat = moneyFormat;//this is a hack for now.
 
@@ -69,7 +75,9 @@
                     userId: userId,
                     url: "/api/" + action,
                     template: "#" + template,
-                    location: "#" + elem.id
+                    location: "#" + elem.id,
+                    type: recommendType,
+                    noImageUrl: noImageUrl,
                 });
 
             });
@@ -106,9 +114,9 @@
 
             });
         },
-        RunTemplate: function (template, context, location) {
+        RunTemplate: function (template, context, location, noImageUrl) {
             //move the next two lines
-            var engine = api.GetTemplateEngine();
+            var engine = api.GetTemplateEngine(noImageUrl);
 
             var source = '';
 
@@ -122,12 +130,16 @@
 
             $(location).html(html).show();
         },
-        GetTemplateEngine: function () {
+        GetTemplateEngine: function (noImageUrl) {
             var engine = require('liquid');
             engine.Partial.registerTemplates();
 
             engine.Template.registerFilter({
                 img_url: function (input, type) {
+
+                    if (input.length == 0)
+                        return noImageUrl;
+
                     return String(input).replace(/\.([0-9a-z]+)(?:[\?#]|$)/i, "_" + type + "$&");
                 },
 
