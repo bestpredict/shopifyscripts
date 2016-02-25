@@ -137,7 +137,7 @@
             engine.Template.registerFilter({
                 img_url: function (input, type) {
 
-                    if (input.length == 0)
+                    if (input ==null || input.length == 0)
                         return noImageUrl;
 
                     return String(input).replace(/\.([0-9a-z]+)(?:[\?#]|$)/i, "_" + type + "$&");
