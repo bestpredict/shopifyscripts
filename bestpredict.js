@@ -84,7 +84,7 @@
         },
         ReadShopifyPageInformation: function () {
 
-            if (typeof variable !== typeof __st ? true : false)
+            if (typeof __st !== typeof undefined ? true : false)
                 return;
 
             var pageInfo = __st;
