@@ -36,11 +36,12 @@
             }
         },
         Urls: [
+            { key: 'similar', action: 'Similar' },
             { key: 'similar-viewed', action: 'Predict' },
-            { key: 'similar-bought', action: 'Predict' },
-            { key: 'history', action: 'Predict' },
-            { key: 'trending', action: 'Predict' },
-            { key: 'top', action: 'Predict' },
+            { key: 'similar-bought', action: 'Similar' },
+            { key: 'history', action: 'History' },
+            { key: 'trending', action: 'Trending' },
+            { key: 'top', action: 'Top' },
         ],
 
         Run: function ($) {
@@ -109,6 +110,9 @@
             api.LoadSettings(function (settings) {
                 //Save app settings
                 api.Settings = settings;
+
+                if (api.Settings == null)
+                    return;
 
                 api.LoadScript(api.Server + '/scripts/liquid.min.js', function () {
                     //Load the app
