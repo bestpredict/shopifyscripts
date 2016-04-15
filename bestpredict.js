@@ -11,6 +11,16 @@
             ResourceId: '',
         },
         MoneyFormat: '$ {{amount}}',
+
+        //for testing
+        EnablePredictions: function () {
+            document.cookie = "bestpredict_enable=true";
+        },
+        DisablePredictions: function () {
+            document.cookie = "bestpredict_enable=false";
+        },
+
+
         DownloadAndPopulate: function (options) {
             // Override defaults with arguments
             // $.extend({}, options);
@@ -42,6 +52,8 @@
             { key: 'history', action: 'History' },
             { key: 'trending', action: 'Trending' },
             { key: 'top', action: 'Top' },
+            { key: 'top-latest', action: 'TopLatest' },
+            { key: 'hot', action: 'Hot' },
         ],
 
         Run: function ($) {
@@ -113,6 +125,24 @@
 
                 if (api.Settings == null)
                     return;
+
+                if (api.Settings.Testing) {
+                    function getCookie(cname) {
+                        var name = cname + "=";
+                        var ca = document.cookie.split(';');
+                        for (var i = 0; i < ca.length; i++) {
+                            var c = ca[i];
+                            while (c.charAt(0) == ' ') c = c.substring(1);
+                            if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+                        }
+                        return "";
+                    }
+
+                    if (!getCookie("getCookie")) {
+                        return;
+                    }
+                }
+
 
                 api.LoadScript(api.Server + '/scripts/liquid.min.js', function () {
                     //Load the app
