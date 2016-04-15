@@ -138,7 +138,7 @@
                         return "";
                     }
 
-                    if (!getCookie("getCookie")) {
+                    if (!getCookie("bestpredict_enable")) {
                         return;
                     }
                 }
