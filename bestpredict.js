@@ -126,7 +126,7 @@
                 if (api.Settings == null)
                     return;
 
-                if (api.Settings.Testing) {
+                if (api.Settings.testing) {
                     function getCookie(cname) {
                         var name = cname + "=";
                         var ca = document.cookie.split(';');
